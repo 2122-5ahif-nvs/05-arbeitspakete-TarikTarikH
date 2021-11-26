@@ -9,7 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 @ApplicationScoped
-public class GreetingResource {
+public class GreetingService {
     @Inject
     ManagedExecutor executor;
 
