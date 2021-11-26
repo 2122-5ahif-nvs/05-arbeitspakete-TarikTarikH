@@ -1,16 +1,25 @@
 package at.htl;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import io.quarkus.vertx.ConsumeEvent;
+import io.smallrye.mutiny.Uni;
+import org.eclipse.microprofile.context.ManagedExecutor;
 
-@Path("/hello")
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
+@ApplicationScoped
 public class GreetingResource {
+    @Inject
+    ManagedExecutor executor;
 
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return "Hello RESTEasy";
+
+    @ConsumeEvent("greeting")
+    public String consume(String name){
+        return name.toUpperCase();
+    }
+
+    @ConsumeEvent("greeting2")
+    public Uni<String> process(String name) {
+        return Uni.createFrom().item(name::toUpperCase).emitOn(executor);
     }
 }
